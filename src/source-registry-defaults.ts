@@ -6,10 +6,12 @@ const DEFAULT_CREATED_AT = "2026-06-19T00:00:00.000Z";
 export const DEFAULT_SOURCE_REGISTRY: SourceRegistryEntry[] = [
   defaultEntry("chatgpt", "ChatGPT / OpenAI", "LLM", "OpenAI ChatGPT conversations, planning sessions, and reasoning notes.", "#2f80ff"),
   defaultEntry("claude", "Claude", "LLM", "Anthropic Claude writing, strategy, and analysis sessions.", "#8f5cff"),
+  defaultEntry("claude-code", "Claude Code", "Code", "Anthropic Claude Code coding sessions and agent work.", "#b05cff"),
   defaultEntry("gemini", "Gemini", "LLM", "Google Gemini research, analysis, and multimodal notes.", "#00d4ff"),
   defaultEntry("midjourney", "Midjourney", "Image", "Midjourney image prompts, visual concepts, and generation runs.", "#ff4fd8"),
   defaultEntry("canva", "Canva", "Image", "Canva designs, visual assets, and presentation/source artifacts.", "#20c4cb"),
   defaultEntry("codex", "VS Code / Code Session", "Code", "Code sessions, editor work, coding agents, and build notes.", "#39ff88"),
+  defaultEntry("github", "GitHub", "Code", "GitHub repository, pull request, issue, and release notes.", "#f5f5f5"),
   defaultEntry("manual", "Manual Note", "Manual", "Human-authored project notes and manual records.", "#b8c0cc"),
   defaultEntry("ollama", "Local File", "Local", "Local files, local model output, and machine-local notes.", "#ffb020"),
   defaultEntry("unknown", "Unknown Source", "Unknown", "Fallback bucket for unclassified or missing provenance.", "#666666")
@@ -102,4 +104,3 @@ function defaultEntry(
     updatedAt: DEFAULT_CREATED_AT
   };
 }
-

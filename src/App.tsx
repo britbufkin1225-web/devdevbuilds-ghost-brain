@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import BrainGraph from "./components/BrainGraph.tsx";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import HoverCard from "./components/HoverCard.tsx";
 import LeftSidebar from "./components/LeftSidebar.tsx";
 import RightDetailPanel from "./components/RightDetailPanel.tsx";
 import SourceModelsPanel from "./components/SourceModelsPanel.tsx";
 import TopCommandBar from "./components/TopCommandBar.tsx";
 import type { Filters, GraphData, GraphNode, ViewMode } from "./graph-types.ts";
-import { createInitialFilters, filterGraph } from "./graph-utils.ts";
+import { createInitialFilters, filterGraph, normalizeGraphData } from "./graph-utils.ts";
 import { createRegistryIndex, mergeRegistryWithGraphSources, resolveSourceEntry } from "./source-registry-defaults.ts";
 import type { SourceRegistryEntry } from "./source-registry-types.ts";
 import {
@@ -16,6 +15,8 @@ import {
   saveActiveSourceFilters,
   saveSourceRegistry
 } from "./source-registry-storage.ts";
+
+const BrainGraph = lazy(() => import("./components/BrainGraph.tsx"));
 
 export default function App() {
   const [graph, setGraph] = useState<GraphData | null>(null);
@@ -42,13 +43,14 @@ export default function App() {
           throw new Error(`Graph data request failed with ${response.status}`);
         }
 
-        return response.json() as Promise<GraphData>;
+        return response.json();
       })
-      .then((nextGraph) => {
+      .then((rawGraph: unknown) => {
         if (!isMounted) {
           return;
         }
 
+        const nextGraph = normalizeGraphData(rawGraph);
         setGraph(nextGraph);
         const nextRegistry = createRegistryIndex(mergeRegistryWithGraphSources(registryEntries, nextGraph));
         const nextFilters = createInitialFilters(nextGraph, nextRegistry);
@@ -145,15 +147,17 @@ export default function App() {
         <LeftSidebar graph={graph} filters={filters} registry={registry} onFiltersChange={updateFilters} />
 
         <section className="graph-stage" aria-label="3D Ghost Brain graph viewer">
-          <BrainGraph
-            graph={visibleGraph}
-            selectedNode={selectedNode}
-            hoveredNode={hoveredNode}
-            registry={registry}
-            viewMode={viewMode}
-            onHoverNode={setHoveredNode}
-            onSelectNode={setSelectedNode}
-          />
+          <Suspense fallback={<div className="graph-loading">Loading 3D brain surface...</div>}>
+            <BrainGraph
+              graph={visibleGraph}
+              selectedNode={selectedNode}
+              hoveredNode={hoveredNode}
+              registry={registry}
+              viewMode={viewMode}
+              onHoverNode={setHoveredNode}
+              onSelectNode={setSelectedNode}
+            />
+          </Suspense>
           <HoverCard node={hoveredNode} registry={registry} />
           <div className="status-strip">
             <span>{visibleGraph.nodes.length} visible nodes</span>

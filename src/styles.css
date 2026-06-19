@@ -283,6 +283,17 @@ p {
   animation: breathe 5.8s ease-in-out infinite;
 }
 
+.graph-loading {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #aeefff;
+  font-size: 13px;
+  background: rgba(3, 9, 16, 0.28);
+}
+
 .hover-card {
   position: absolute;
   z-index: 4;

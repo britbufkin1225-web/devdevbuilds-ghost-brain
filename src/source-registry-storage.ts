@@ -16,7 +16,7 @@ export function loadSourceRegistry(): SourceRegistryEntry[] {
     return cloneEntries(DEFAULT_SOURCE_REGISTRY);
   }
 
-  const raw = window.localStorage.getItem(SOURCE_REGISTRY_KEY);
+  const raw = safeGetItem(SOURCE_REGISTRY_KEY);
 
   if (!raw) {
     const defaults = cloneEntries(DEFAULT_SOURCE_REGISTRY);
@@ -25,7 +25,7 @@ export function loadSourceRegistry(): SourceRegistryEntry[] {
   }
 
   try {
-    return normalizeRegistry(JSON.parse(raw));
+    return mergeMissingDefaults(normalizeRegistry(JSON.parse(raw)));
   } catch {
     return cloneEntries(DEFAULT_SOURCE_REGISTRY);
   }
@@ -36,7 +36,7 @@ export function saveSourceRegistry(entries: SourceRegistryEntry[]): void {
     return;
   }
 
-  window.localStorage.setItem(SOURCE_REGISTRY_KEY, exportSourceRegistry(entries));
+  safeSetItem(SOURCE_REGISTRY_KEY, exportSourceRegistry(entries));
 }
 
 export function resetSourceRegistry(): SourceRegistryEntry[] {
@@ -64,7 +64,7 @@ export function saveActiveSourceFilters(filters: Filters): void {
     categories: Array.from(filters.categories) as SourceCategory[]
   };
 
-  window.localStorage.setItem(ACTIVE_SOURCE_FILTER_KEY, JSON.stringify(stored));
+  safeSetItem(ACTIVE_SOURCE_FILTER_KEY, JSON.stringify(stored));
 }
 
 export function loadActiveSourceFilters(): StoredFilters | null {
@@ -72,7 +72,7 @@ export function loadActiveSourceFilters(): StoredFilters | null {
     return null;
   }
 
-  const raw = window.localStorage.getItem(ACTIVE_SOURCE_FILTER_KEY);
+  const raw = safeGetItem(ACTIVE_SOURCE_FILTER_KEY);
 
   if (!raw) {
     return null;
@@ -93,7 +93,7 @@ export function loadActiveSourceFilters(): StoredFilters | null {
 
 export function clearActiveSourceFilters(): void {
   if (canUseLocalStorage()) {
-    window.localStorage.removeItem(ACTIVE_SOURCE_FILTER_KEY);
+    safeRemoveItem(ACTIVE_SOURCE_FILTER_KEY);
   }
 }
 
@@ -104,13 +104,28 @@ function normalizeRegistry(value: unknown): SourceRegistryEntry[] {
 
   const entries = value.map(normalizeEntry).filter((entry): entry is SourceRegistryEntry => entry !== null);
   const byId = new Map<string, SourceRegistryEntry>();
+  const usedNames = new Set<string>();
 
   for (const entry of entries) {
-    byId.set(entry.id, entry);
+    const normalizedName = uniqueName(entry.name, entry.id, usedNames);
+    byId.set(entry.id, { ...entry, name: normalizedName });
+    usedNames.add(normalizedName.toLowerCase());
   }
 
   if (!byId.has("unknown")) {
     byId.set("unknown", cloneEntry(DEFAULT_SOURCE_REGISTRY.find((entry) => entry.id === "unknown")!));
+  }
+
+  return Array.from(byId.values());
+}
+
+function mergeMissingDefaults(entries: SourceRegistryEntry[]): SourceRegistryEntry[] {
+  const byId = new Map(entries.map((entry) => [entry.id, entry]));
+
+  for (const defaultEntry of DEFAULT_SOURCE_REGISTRY) {
+    if (!byId.has(defaultEntry.id)) {
+      byId.set(defaultEntry.id, cloneEntry(defaultEntry));
+    }
   }
 
   return Array.from(byId.values());
@@ -160,6 +175,14 @@ function normalizeDate(value: unknown): string {
   return new Date().toISOString();
 }
 
+function uniqueName(name: string, id: string, usedNames: Set<string>): string {
+  if (!usedNames.has(name.toLowerCase())) {
+    return name;
+  }
+
+  return `${name} (${id})`;
+}
+
 function cloneEntries(entries: SourceRegistryEntry[]): SourceRegistryEntry[] {
   return entries.map(cloneEntry);
 }
@@ -179,4 +202,28 @@ function cleanId(value: string): string {
 
 function canUseLocalStorage(): boolean {
   return typeof window !== "undefined" && "localStorage" in window;
+}
+
+function safeGetItem(key: string): string | null {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeSetItem(key: string, value: string): void {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Persistence is best-effort in Phase 4A; the UI should keep running if storage is blocked.
+  }
+}
+
+function safeRemoveItem(key: string): void {
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Ignore storage removal failures for the same reason as writes.
+  }
 }

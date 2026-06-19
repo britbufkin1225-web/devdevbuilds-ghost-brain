@@ -162,6 +162,7 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
     onReset();
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setRegistryJson("");
     setMessage("Registry reset to the default sources.");
   }
 
