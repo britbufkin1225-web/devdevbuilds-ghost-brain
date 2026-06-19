@@ -28,14 +28,14 @@ export default function RightDetailPanel({ node, registry }: Props) {
         <div className="detail-content">
           <div className="detail-kicker">
             <span className="selected-dot" />
-            <span>{source?.label}</span>
+            <span>{source?.name}</span>
           </div>
           <h2>{node.title}</h2>
 
           <dl className="metadata-list">
             <Metadata label="Source" value={node.source} />
-            <Metadata label="Source family" value={source?.family ?? node.sourceFamily} />
-            <Metadata label="Category" value={source ? formatLabel(source.category) : "Unknown"} />
+            <Metadata label="Source family" value={node.sourceFamily} />
+            <Metadata label="Category" value={source?.category ?? "Unknown"} />
             <Metadata label="Project" value={node.project} />
             <Metadata label="Type" value={formatLabel(node.type)} />
             <Metadata label="Status" value={node.status} />

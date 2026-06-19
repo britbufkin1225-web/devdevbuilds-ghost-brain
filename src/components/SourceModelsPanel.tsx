@@ -1,13 +1,13 @@
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
-import type { SourceCategory, SourceRegistryEntry } from "../source-registry-types.ts";
-import { SOURCE_CATEGORIES } from "../source-registry-types.ts";
 import { FUTURE_SOURCE_EXAMPLES } from "../source-registry-defaults.ts";
 import { exportSourceRegistry, importSourceRegistry } from "../source-registry-storage.ts";
-import { formatLabel } from "../graph-utils.ts";
+import type { SourceCategory, SourceRegistryEntry } from "../source-registry-types.ts";
+import { SOURCE_CATEGORIES } from "../source-registry-types.ts";
 
 type Props = {
   entries: SourceRegistryEntry[];
+  defaultIds: Set<string>;
   onChange: (entries: SourceRegistryEntry[]) => void;
   onReset: () => void;
   onClose: () => void;
@@ -15,23 +15,21 @@ type Props = {
 
 type FormState = {
   id: string;
-  label: string;
-  family: string;
+  name: string;
   category: SourceCategory;
+  description: string;
   color: string;
-  aliases: string;
 };
 
 const EMPTY_FORM: FormState = {
   id: "",
-  label: "",
-  family: "",
-  category: "llm",
-  color: "#00d4ff",
-  aliases: ""
+  name: "",
+  category: "LLM",
+  description: "",
+  color: "#00d4ff"
 };
 
-export default function SourceModelsPanel({ entries, onChange, onReset, onClose }: Props) {
+export default function SourceModelsPanel({ entries, defaultIds, onChange, onReset, onClose }: Props) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [registryJson, setRegistryJson] = useState("");
@@ -51,25 +49,28 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
   }
 
   function saveEntry() {
+    const now = new Date().toISOString();
     const id = cleanId(form.id);
+    const existing = entries.find((entry) => entry.id === editingId || entry.id === id);
 
-    if (!id || !form.label.trim()) {
-      setMessage("Source id and label are required.");
+    if (!id || !form.name.trim()) {
+      setMessage("Source id and name are required.");
       return;
     }
 
     const nextEntry: SourceRegistryEntry = {
       id,
-      label: form.label.trim(),
-      family: form.family.trim() || "unknown",
+      name: form.name.trim(),
       category: form.category,
+      description: form.description.trim(),
       color: /^#[0-9a-fA-F]{6}$/.test(form.color) ? form.color : "#666666",
-      enabled: entries.find((entry) => entry.id === editingId)?.enabled ?? true,
-      aliases: parseAliases(form.aliases, id)
+      enabled: existing?.enabled ?? true,
+      createdAt: existing?.createdAt ?? now,
+      updatedAt: now
     };
     const withoutEdited = entries.filter((entry) => entry.id !== (editingId ?? id));
 
-    onChange([...withoutEdited, nextEntry].sort((a, b) => a.label.localeCompare(b.label)));
+    onChange([...withoutEdited, nextEntry].sort((a, b) => a.name.localeCompare(b.name)));
     setEditingId(null);
     setForm(EMPTY_FORM);
     setMessage("Registry entry saved.");
@@ -79,17 +80,31 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
     setEditingId(entry.id);
     setForm({
       id: entry.id,
-      label: entry.label,
-      family: entry.family,
+      name: entry.name,
       category: entry.category,
-      color: entry.color,
-      aliases: entry.aliases.join(", ")
+      description: entry.description,
+      color: entry.color
     });
     setMessage(null);
   }
 
   function toggleEnabled(entry: SourceRegistryEntry) {
-    onChange(entries.map((item) => (item.id === entry.id ? { ...item, enabled: !item.enabled } : item)));
+    const now = new Date().toISOString();
+    onChange(
+      entries.map((item) =>
+        item.id === entry.id ? { ...item, enabled: !item.enabled, updatedAt: now } : item
+      )
+    );
+  }
+
+  function deleteEntry(entry: SourceRegistryEntry) {
+    if (defaultIds.has(entry.id)) {
+      setMessage("Default registry entries cannot be deleted. Disable them instead.");
+      return;
+    }
+
+    onChange(entries.filter((item) => item.id !== entry.id));
+    setMessage(`${entry.name} deleted.`);
   }
 
   function addExample(example: SourceRegistryEntry) {
@@ -98,8 +113,11 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
       return;
     }
 
-    onChange([...entries, { ...example, aliases: [...example.aliases] }].sort((a, b) => a.label.localeCompare(b.label)));
-    setMessage(`${example.label} added to the registry.`);
+    const now = new Date().toISOString();
+    onChange(
+      [...entries, { ...example, createdAt: now, updatedAt: now }].sort((a, b) => a.name.localeCompare(b.name))
+    );
+    setMessage(`${example.name} added to the registry.`);
   }
 
   function exportRegistry() {
@@ -123,7 +141,7 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
         <div className="registry-header">
           <div>
             <h2>Sources & Models</h2>
-            <p>Manage source identities for LLMs, code tools, media models, research tools, local models, and notes.</p>
+            <p>Manage source identities for LLM, code, image, music, video, audio, research, local, manual, and unknown sources.</p>
           </div>
           <button type="button" onClick={onClose}>
             Close
@@ -142,7 +160,7 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
             <div className="category-summary">
               {SOURCE_CATEGORIES.map((category) => (
                 <span key={category}>
-                  {formatLabel(category)}: {categoryCounts.get(category) ?? 0}
+                  {category}: {categoryCounts.get(category) ?? 0}
                 </span>
               ))}
             </div>
@@ -155,9 +173,9 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
                     style={{ "--source-color": entry.color } as CSSProperties & Record<"--source-color", string>}
                   />
                   <div>
-                    <strong>{entry.label}</strong>
+                    <strong>{entry.name}</strong>
                     <small>
-                      {entry.id} / {formatLabel(entry.category)} / {entry.family}
+                      {entry.id} / {entry.category}
                     </small>
                   </div>
                   <button type="button" onClick={() => toggleEnabled(entry)}>
@@ -165,6 +183,9 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
                   </button>
                   <button type="button" onClick={() => editEntry(entry)}>
                     Edit
+                  </button>
+                  <button type="button" onClick={() => deleteEntry(entry)} disabled={defaultIds.has(entry.id)}>
+                    Delete
                   </button>
                 </article>
               ))}
@@ -175,16 +196,12 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
             <h3>{editingId ? "Edit Source" : "Add Source"}</h3>
             <div className="registry-form">
               <label>
-                Label
-                <input value={form.label} onChange={(event) => updateForm("label", event.target.value)} />
+                Name
+                <input value={form.name} onChange={(event) => updateForm("name", event.target.value)} />
               </label>
               <label>
                 ID
                 <input value={form.id} onChange={(event) => updateForm("id", event.target.value)} />
-              </label>
-              <label>
-                Family / provider
-                <input value={form.family} onChange={(event) => updateForm("family", event.target.value)} />
               </label>
               <label>
                 Category
@@ -194,7 +211,7 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
                 >
                   {SOURCE_CATEGORIES.map((category) => (
                     <option key={category} value={category}>
-                      {formatLabel(category)}
+                      {category}
                     </option>
                   ))}
                 </select>
@@ -204,11 +221,11 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
                 <input type="color" value={form.color} onChange={(event) => updateForm("color", event.target.value)} />
               </label>
               <label>
-                Aliases
-                <input
-                  value={form.aliases}
-                  onChange={(event) => updateForm("aliases", event.target.value)}
-                  placeholder="comma-separated aliases"
+                Description
+                <textarea
+                  value={form.description}
+                  onChange={(event) => updateForm("description", event.target.value)}
+                  placeholder="What kind of source/model is this?"
                 />
               </label>
               <div className="registry-actions">
@@ -231,8 +248,8 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
             <div className="example-source-grid">
               {FUTURE_SOURCE_EXAMPLES.map((example) => (
                 <button key={example.id} type="button" onClick={() => addExample(example)}>
-                  {example.label}
-                  <span>{formatLabel(example.category)}</span>
+                  {example.name}
+                  <span>{example.category}</span>
                 </button>
               ))}
             </div>
@@ -259,18 +276,6 @@ export default function SourceModelsPanel({ entries, onChange, onReset, onClose 
   );
 }
 
-function parseAliases(value: string, id: string): string[] {
-  return Array.from(
-    new Set([
-      id,
-      ...value
-        .split(",")
-        .map((alias) => alias.trim())
-        .filter(Boolean)
-    ])
-  );
-}
-
 function cleanId(value: string): string {
   return value
     .trim()
@@ -279,3 +284,4 @@ function cleanId(value: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
+

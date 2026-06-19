@@ -138,15 +138,15 @@ Phase 4A adds a Sources & Models panel for managing the expandable registry. The
 
 The GUI should allow users to add a new source/model entry with these fields:
 
-- `label`: human-readable name, such as Suno or LM Studio.
+- `name`: human-readable name, such as Suno or LM Studio.
 - `id`: stable source id used by graph nodes, such as `suno` or `lm-studio`.
-- `family/provider`: provider or ecosystem, such as OpenAI, Anthropic, Suno, or local.
 - `category`: one of LLM, Code, Image, Music, Video, Audio, Research, Local, Manual, or Unknown.
 - `color`: source identity color used in graph nodes, filters, labels, and detail tinting.
-- `aliases`: folder names, frontmatter values, export names, or model names that should map to this source.
+- `description`: short explanation of the source/model.
 - `enabled`: whether the source appears in filters and graph grouping.
+- `createdAt` and `updatedAt`: ISO timestamps maintained by the app.
 
-Phase 4A persists user-added sources through `localStorage` and supports registry import/export as JSON. This keeps the first registry GUI local, reversible, and easy to test. The limitation is that registry changes are browser-local until exported.
+Phase 4A persists user-added sources through `localStorage` key `obsidianBrain.sourceRegistry` and active source/category filters through `obsidianBrain.activeSourceFilters`. It supports registry import/export as JSON. This keeps the first registry GUI local, reversible, and easy to test. The limitation is that registry changes are browser-local until exported.
 
 Graph source filters should continue to work, and category filters should allow users to isolate LLM, Code, Image, Music, Video, Audio, Research, Local, Manual, and Unknown groups.
 

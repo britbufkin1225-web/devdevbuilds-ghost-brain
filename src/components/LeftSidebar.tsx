@@ -33,7 +33,7 @@ export default function LeftSidebar({ graph, filters, registry, onFiltersChange 
 
   const sourceCounts = new Map(graph.sourceGroups.map((group) => [group.source, group.count]));
   const graphSourceIds = new Set(graph.sourceGroups.map((group) => group.source));
-  const sourcesInGraph = registry.entries.filter((entry) => graphSourceIds.has(entry.id));
+  const sourcesInGraph = registry.entries.filter((entry) => entry.enabled && graphSourceIds.has(entry.id));
   const categoryCounts = new Map<string, number>();
 
   for (const node of graph.nodes) {
@@ -64,7 +64,7 @@ export default function LeftSidebar({ graph, filters, registry, onFiltersChange 
               style={{ "--source-color": source.color } as CSSProperties & Record<"--source-color", string>}
             >
               <span className="source-dot" />
-              <span>{source.label}</span>
+              <span>{source.name}</span>
               <strong>{sourceCounts.get(source.id) ?? 0}</strong>
             </button>
           );
@@ -81,7 +81,7 @@ export default function LeftSidebar({ graph, filters, registry, onFiltersChange 
               type="button"
               onClick={() => toggleFilter("categories", category)}
             >
-              <span>{formatLabel(category)}</span>
+              <span>{category}</span>
               <strong>{count}</strong>
             </button>
           ))}

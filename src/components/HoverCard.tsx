@@ -21,7 +21,7 @@ export default function HoverCard({ node, registry }: Props) {
       className="hover-card"
       style={{ "--hover-color": source.color } as CSSProperties & Record<"--hover-color", string>}
     >
-      <div className="hover-card-kicker">{source.label}</div>
+      <div className="hover-card-kicker">{source.name}</div>
       <h2>{node.title}</h2>
       <p>{node.project}</p>
       <dl>

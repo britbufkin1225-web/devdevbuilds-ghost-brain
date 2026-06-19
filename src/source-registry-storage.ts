@@ -1,18 +1,27 @@
 import { DEFAULT_SOURCE_REGISTRY } from "./source-registry-defaults.ts";
-import type { SourceRegistryEntry } from "./source-registry-types.ts";
+import type { Filters } from "./graph-types.ts";
+import type { SourceCategory, SourceRegistryEntry } from "./source-registry-types.ts";
 import { SOURCE_CATEGORIES } from "./source-registry-types.ts";
 
-const STORAGE_KEY = "devdevbuilds-ghost-brain.source-registry.v1";
+export const SOURCE_REGISTRY_KEY = "obsidianBrain.sourceRegistry";
+export const ACTIVE_SOURCE_FILTER_KEY = "obsidianBrain.activeSourceFilters";
+
+type StoredFilters = {
+  sources: string[];
+  categories: SourceCategory[];
+};
 
 export function loadSourceRegistry(): SourceRegistryEntry[] {
   if (!canUseLocalStorage()) {
     return cloneEntries(DEFAULT_SOURCE_REGISTRY);
   }
 
-  const raw = window.localStorage.getItem(STORAGE_KEY);
+  const raw = window.localStorage.getItem(SOURCE_REGISTRY_KEY);
 
   if (!raw) {
-    return cloneEntries(DEFAULT_SOURCE_REGISTRY);
+    const defaults = cloneEntries(DEFAULT_SOURCE_REGISTRY);
+    saveSourceRegistry(defaults);
+    return defaults;
   }
 
   try {
@@ -27,12 +36,13 @@ export function saveSourceRegistry(entries: SourceRegistryEntry[]): void {
     return;
   }
 
-  window.localStorage.setItem(STORAGE_KEY, exportSourceRegistry(entries));
+  window.localStorage.setItem(SOURCE_REGISTRY_KEY, exportSourceRegistry(entries));
 }
 
 export function resetSourceRegistry(): SourceRegistryEntry[] {
   const defaults = cloneEntries(DEFAULT_SOURCE_REGISTRY);
   saveSourceRegistry(defaults);
+  clearActiveSourceFilters();
   return defaults;
 }
 
@@ -42,6 +52,49 @@ export function exportSourceRegistry(entries: SourceRegistryEntry[]): string {
 
 export function importSourceRegistry(json: string): SourceRegistryEntry[] {
   return normalizeRegistry(JSON.parse(json));
+}
+
+export function saveActiveSourceFilters(filters: Filters): void {
+  if (!canUseLocalStorage()) {
+    return;
+  }
+
+  const stored: StoredFilters = {
+    sources: Array.from(filters.sources),
+    categories: Array.from(filters.categories) as SourceCategory[]
+  };
+
+  window.localStorage.setItem(ACTIVE_SOURCE_FILTER_KEY, JSON.stringify(stored));
+}
+
+export function loadActiveSourceFilters(): StoredFilters | null {
+  if (!canUseLocalStorage()) {
+    return null;
+  }
+
+  const raw = window.localStorage.getItem(ACTIVE_SOURCE_FILTER_KEY);
+
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as Partial<StoredFilters>;
+    return {
+      sources: Array.isArray(parsed.sources) ? parsed.sources.map(String) : [],
+      categories: Array.isArray(parsed.categories)
+        ? parsed.categories.filter((category): category is SourceCategory => SOURCE_CATEGORIES.includes(category))
+        : []
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function clearActiveSourceFilters(): void {
+  if (canUseLocalStorage()) {
+    window.localStorage.removeItem(ACTIVE_SOURCE_FILTER_KEY);
+  }
 }
 
 function normalizeRegistry(value: unknown): SourceRegistryEntry[] {
@@ -70,29 +123,40 @@ function normalizeEntry(value: unknown): SourceRegistryEntry | null {
 
   const record = value as Record<string, unknown>;
   const id = cleanId(String(record.id ?? ""));
-  const label = String(record.label ?? "").trim();
-  const family = String(record.family ?? record.provider ?? "").trim();
-  const category = String(record.category ?? "unknown").trim();
+  const name = String(record.name ?? record.label ?? "").trim();
+  const category = normalizeCategory(String(record.category ?? "Unknown"));
+  const description = String(record.description ?? record.family ?? "").trim();
   const color = String(record.color ?? "#666666").trim();
-  const aliases = Array.isArray(record.aliases)
-    ? record.aliases.map((alias) => String(alias).trim()).filter(Boolean)
-    : [];
+  const createdAt = normalizeDate(record.createdAt);
+  const updatedAt = normalizeDate(record.updatedAt);
 
-  if (!id || !label) {
+  if (!id || !name) {
     return null;
   }
 
   return {
     id,
-    label,
-    family: family || "unknown",
-    category: SOURCE_CATEGORIES.includes(category as SourceRegistryEntry["category"])
-      ? (category as SourceRegistryEntry["category"])
-      : "unknown",
-    color: /^#[0-9a-fA-F]{6}$/.test(color) ? color : "#666666",
+    name,
+    category,
+    description,
     enabled: typeof record.enabled === "boolean" ? record.enabled : true,
-    aliases: Array.from(new Set([id, ...aliases]))
+    color: /^#[0-9a-fA-F]{6}$/.test(color) ? color : "#666666",
+    createdAt,
+    updatedAt
   };
+}
+
+function normalizeCategory(value: string): SourceCategory {
+  const match = SOURCE_CATEGORIES.find((category) => category.toLowerCase() === value.toLowerCase());
+  return match ?? "Unknown";
+}
+
+function normalizeDate(value: unknown): string {
+  if (typeof value === "string" && !Number.isNaN(Date.parse(value))) {
+    return value;
+  }
+
+  return new Date().toISOString();
 }
 
 function cloneEntries(entries: SourceRegistryEntry[]): SourceRegistryEntry[] {
@@ -100,10 +164,7 @@ function cloneEntries(entries: SourceRegistryEntry[]): SourceRegistryEntry[] {
 }
 
 function cloneEntry(entry: SourceRegistryEntry): SourceRegistryEntry {
-  return {
-    ...entry,
-    aliases: [...entry.aliases]
-  };
+  return { ...entry };
 }
 
 function cleanId(value: string): string {

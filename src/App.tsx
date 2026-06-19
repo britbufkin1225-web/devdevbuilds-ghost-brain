@@ -9,7 +9,13 @@ import type { Filters, GraphData, GraphNode, ViewMode } from "./graph-types.ts";
 import { createInitialFilters, filterGraph } from "./graph-utils.ts";
 import { createRegistryIndex, mergeRegistryWithGraphSources, resolveSourceEntry } from "./source-registry-defaults.ts";
 import type { SourceRegistryEntry } from "./source-registry-types.ts";
-import { loadSourceRegistry, resetSourceRegistry, saveSourceRegistry } from "./source-registry-storage.ts";
+import {
+  loadActiveSourceFilters,
+  loadSourceRegistry,
+  resetSourceRegistry,
+  saveActiveSourceFilters,
+  saveSourceRegistry
+} from "./source-registry-storage.ts";
 
 export default function App() {
   const [graph, setGraph] = useState<GraphData | null>(null);
@@ -44,7 +50,18 @@ export default function App() {
         }
 
         setGraph(nextGraph);
-        setFilters(createInitialFilters(nextGraph, createRegistryIndex(mergeRegistryWithGraphSources(registryEntries, nextGraph))));
+        const nextRegistry = createRegistryIndex(mergeRegistryWithGraphSources(registryEntries, nextGraph));
+        const nextFilters = createInitialFilters(nextGraph, nextRegistry);
+        const storedFilters = loadActiveSourceFilters();
+
+        if (storedFilters) {
+          nextFilters.sources = new Set(storedFilters.sources.filter((source) => nextFilters.sources.has(source)));
+          nextFilters.categories = new Set(
+            storedFilters.categories.filter((category) => nextFilters.categories.has(category))
+          );
+        }
+
+        setFilters(nextFilters);
       })
       .catch((error: unknown) => {
         if (!isMounted) {
@@ -72,6 +89,11 @@ export default function App() {
       return typeof nextFilters === "function" ? nextFilters(current) : nextFilters;
     });
   };
+  useEffect(() => {
+    if (filters) {
+      saveActiveSourceFilters(filters);
+    }
+  }, [filters]);
   const updateRegistry = (entries: SourceRegistryEntry[]) => {
     setRegistryEntries(entries);
     saveSourceRegistry(entries);
@@ -90,7 +112,7 @@ export default function App() {
   };
   const selectedSource = selectedNode?.source ?? hoveredNode?.source;
   const selectedProject = selectedNode?.project ?? hoveredNode?.project;
-  const selectedSourceLabel = selectedSource ? resolveSourceEntry(selectedSource, registry).label : null;
+  const selectedSourceLabel = selectedSource ? resolveSourceEntry(selectedSource, registry).name : null;
 
   if (loadError) {
     return (
@@ -147,6 +169,7 @@ export default function App() {
       {isRegistryOpen ? (
         <SourceModelsPanel
           entries={registryEntries}
+          defaultIds={registry.defaultIds}
           onChange={updateRegistry}
           onReset={resetRegistry}
           onClose={() => setIsRegistryOpen(false)}

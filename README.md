@@ -122,8 +122,10 @@ Phase 4A adds an expandable Source + Model Registry so users can add new AI tool
 Current Phase 4A behavior:
 
 - Open the Sources & Models panel from the top command bar.
-- Let users create source entries with label, id, provider/family, category, color, aliases, and enabled state.
-- Store user-added sources in `localStorage`.
+- Let users create source entries with name, id, category, description, color, and enabled state.
+- Edit, enable/disable, and delete custom entries.
+- Store user-added sources in `localStorage` under `obsidianBrain.sourceRegistry`.
+- Store active source/category filters under `obsidianBrain.activeSourceFilters`.
 - Support import/export of registry JSON.
 - Resolve graph node labels, colors, and categories through the registry when a source id matches.
 - Fall back cleanly for unregistered graph source ids.

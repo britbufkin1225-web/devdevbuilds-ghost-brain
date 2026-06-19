@@ -1,35 +1,36 @@
 export type SourceCategory =
-  | "llm"
-  | "code"
-  | "image"
-  | "music"
-  | "video"
-  | "audio"
-  | "research"
-  | "local"
-  | "manual"
-  | "unknown";
+  | "LLM"
+  | "Code"
+  | "Image"
+  | "Music"
+  | "Video"
+  | "Audio"
+  | "Research"
+  | "Local"
+  | "Manual"
+  | "Unknown";
 
 export type SourceRegistryEntry = {
   id: string;
-  label: string;
-  family: string;
+  name: string;
   category: SourceCategory;
-  color: string;
+  description: string;
   enabled: boolean;
-  aliases: string[];
+  color: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export const SOURCE_CATEGORIES: SourceCategory[] = [
-  "llm",
-  "code",
-  "image",
-  "music",
-  "video",
-  "audio",
-  "research",
-  "local",
-  "manual",
-  "unknown"
+  "LLM",
+  "Code",
+  "Image",
+  "Music",
+  "Video",
+  "Audio",
+  "Research",
+  "Local",
+  "Manual",
+  "Unknown"
 ];
 
