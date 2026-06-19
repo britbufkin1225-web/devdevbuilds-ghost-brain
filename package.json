@@ -3,13 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Source-aware graph data generator for the devdevbuilds Ghost Brain sample vault.",
+  "description": "Source-aware 3D Obsidian memory interface prototype.",
   "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
     "build:graph": "node --experimental-strip-types src/build-graph.ts",
-    "check": "node --experimental-strip-types src/build-graph.ts"
+    "check": "tsc --noEmit && npm run build:graph"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-force-graph-3d": "^1.27.0",
+    "three": "^0.178.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.178.0",
+    "typescript": "^5.8.0",
+    "vite": "^7.0.0"
   },
   "engines": {
     "node": ">=24"
   }
 }
-

@@ -7,6 +7,7 @@ import type { CountSummary, GraphEdge, GraphJson, GraphNode, Source, SourceGroup
 
 const VAULT_DIR = path.join("examples", "sample-vault");
 const OUTPUT_FILE = path.join("data", "graph.json");
+const PUBLIC_OUTPUT_FILE = path.join("public", "data", "graph.json");
 
 async function main(): Promise<void> {
   const markdownFiles = await findMarkdownFiles(VAULT_DIR);
@@ -80,10 +81,19 @@ async function main(): Promise<void> {
     edges
   };
 
-  await mkdir(path.dirname(OUTPUT_FILE), { recursive: true });
-  await writeFile(OUTPUT_FILE, `${JSON.stringify(graph, null, 2)}\n`, "utf8");
+  const graphJson = `${JSON.stringify(graph, null, 2)}\n`;
+
+  await Promise.all([
+    mkdir(path.dirname(OUTPUT_FILE), { recursive: true }),
+    mkdir(path.dirname(PUBLIC_OUTPUT_FILE), { recursive: true })
+  ]);
+  await Promise.all([
+    writeFile(OUTPUT_FILE, graphJson, "utf8"),
+    writeFile(PUBLIC_OUTPUT_FILE, graphJson, "utf8")
+  ]);
 
   console.log(`Generated ${OUTPUT_FILE}`);
+  console.log(`Copied ${PUBLIC_OUTPUT_FILE}`);
   console.log(`Nodes: ${graph.summary.nodeCount}`);
   console.log(`Edges: ${graph.summary.edgeCount}`);
   console.log(`Sources: ${sourceGroups.map((group) => group.source).join(", ")}`);
@@ -161,4 +171,3 @@ main().catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : error);
   process.exitCode = 1;
 });
-
