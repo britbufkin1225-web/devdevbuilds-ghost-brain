@@ -1,8 +1,12 @@
 # Source Grouping
 
-Ghost Brain groups every file by `source` and `source_family`. Source grouping is a first-class behavior, not a cosmetic filter.
+Ghost Brain groups every file by source identity. Source grouping is a first-class behavior, not a cosmetic filter.
 
-## Supported Source Groups
+Phase 4 should move source definitions, source colors, aliases, model mappings, and detection hints into the source/model registry described in `docs/SOURCE_MODEL_REGISTRY.md`.
+
+Source groups should no longer be treated as permanently fixed. The default groups provide a useful starting set, but the user must be able to add new sources and models through the GUI as their AI tool stack changes.
+
+## Default Built-In Sources
 
 | Source | Source family | Description |
 | --- | --- | --- |
@@ -16,6 +20,50 @@ Ghost Brain groups every file by `source` and `source_family`. Source grouping i
 | `github` | `github` | Repository, issue, PR, release, and commit notes |
 | `manual` | `manual` | Human-authored notes without an AI or external tool source |
 | `unknown` | `unknown` | Fallback for unclassified or missing-source files |
+
+These built-ins should ship enabled by default:
+
+- ChatGPT
+- Codex
+- Claude
+- Claude Code
+- Gemini
+- Midjourney
+- Ollama
+- GitHub
+- Manual
+- Unknown
+
+## Future Source Examples
+
+Future user-added registry entries may include:
+
+- Suno for music generation.
+- Udio for music generation.
+- Stable Diffusion for image generation.
+- Runway for video generation.
+- LM Studio for local LLM work.
+- GitHub Copilot for code assistance.
+- Perplexity for research.
+
+## Source Categories
+
+Every registry source should belong to one category:
+
+| Category | Purpose |
+| --- | --- |
+| `llm` | Regular conversational LLMs and assistant tools |
+| `code` | Code models, coding agents, IDE assistants, and repo automation |
+| `image` | Image models and visual generation tools |
+| `music` | Music generation tools |
+| `video` | Video generation and editing tools |
+| `audio` | Voice, speech, sound, and audio processing tools |
+| `research` | Search, research, citation, and knowledge-gathering tools |
+| `local` | Local LLMs and locally hosted model tools |
+| `manual` | Human-authored notes and manual project records |
+| `unknown` | Missing, ambiguous, or untrusted provenance |
+ 
+Categories are for grouping and filtering. They should not replace the specific source id.
 
 ## Folder Layout
 
@@ -60,10 +108,19 @@ Initial color values for the 3D graph:
 Detection should prefer explicit metadata over inference:
 
 1. Use `source` and `source_family` from YAML frontmatter when both are present and valid.
-2. If frontmatter is missing, infer from a recognized source folder path.
-3. If folder inference fails, inspect known filename prefixes only as a weak hint.
-4. If the source still cannot be determined, assign `source: unknown` and `source_family: unknown`.
-5. Record all inferred or unknown cases in cleanup reports.
+2. Check registry frontmatter aliases.
+3. If frontmatter is missing, infer from a recognized registry folder alias.
+4. If folder inference fails, inspect known model aliases.
+5. If model aliases fail, inspect registry detection hints only as a weak content hint.
+6. If the source still cannot be determined, assign `source: unknown` and `source_family: unknown`.
+7. Record all inferred or unknown cases in cleanup reports.
+
+Source detection should also assign `source_confidence`:
+
+- `explicit` for valid frontmatter.
+- `folder-inferred` for registry folder matches.
+- `content-inferred` for weak body/export hints.
+- `unknown` for fallback classification.
 
 ## Unknown Source Fallback Behavior
 
@@ -71,3 +128,4 @@ Unknown files must still appear in the graph. They should be grouped into an Unk
 
 The parser should never discard a readable Markdown note only because source metadata is incomplete.
 
+If a note has a known category but unknown specific source, the registry should prefer a source id that communicates uncertainty, such as `unknown`, until the user adds or selects the correct source entry.

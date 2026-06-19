@@ -24,6 +24,8 @@ The parser/index layer will read Markdown files and extract:
 
 The first parser should be conservative and file-based. It should report missing or ambiguous metadata instead of guessing silently.
 
+Phase 4 should introduce a source/model registry before adding broader parser behavior. The registry becomes the app and parser authority for valid sources, source families, source categories, source colors, aliases, model aliases, and source confidence. Phase 4A should expose this through a local GUI backed by `localStorage` and import/export JSON. Parser logic should later ask the registry how to classify a note instead of hardcoding source rules in multiple places.
+
 ## Graph Data Layer
 
 The graph data layer converts indexed vault content into graph-ready data:
@@ -54,6 +56,8 @@ The cleanup layer will inspect the vault and graph data for problems:
 - Duplicate titles
 - Stale project statuses
 - Notes without project or tags
+- Unknown or mismatched model metadata
+- Weak source confidence, such as content-inferred provenance
 
 Reports should be written to `reports/`.
 
@@ -62,4 +66,3 @@ Reports should be written to `reports/`.
 The future dream engine layer may generate speculative connections, expansion prompts, project next steps, concept maps, or memory resurfacing ideas.
 
 This layer is intentionally out of scope for the MVP. The current project should preserve room for it without building it prematurely.
-

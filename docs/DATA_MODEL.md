@@ -18,7 +18,7 @@ type SourceFamily =
 
 ## Source Type
 
-`Source` describes the specific origin of a note or artifact.
+`Source` describes the specific origin of a note or artifact. Phase 4 should treat these values as default registry ids, not a closed permanent list. User-added sources should also use stable ids.
 
 ```ts
 type Source =
@@ -33,6 +33,96 @@ type Source =
   | "manual"
   | "unknown";
 ```
+
+## SourceCategory Type
+
+`SourceCategory` describes the broad kind of tool or content source represented by a registry entry.
+
+```ts
+type SourceCategory =
+  | "llm"
+  | "code"
+  | "image"
+  | "music"
+  | "video"
+  | "audio"
+  | "research"
+  | "local"
+  | "manual"
+  | "unknown";
+```
+
+## SourceRegistryEntry Shape
+
+Phase 4 introduces a registry-backed source identity model.
+
+```ts
+type SourceRegistryEntry = {
+  id: string;
+  label: string;
+  family: string;
+  category: SourceCategory;
+  color: string;
+  enabled: boolean;
+  aliases: string[];
+};
+```
+
+Registry examples:
+
+```json
+{
+  "id": "chatgpt",
+  "label": "ChatGPT",
+  "family": "openai",
+  "category": "llm",
+  "color": "#2f80ff",
+  "enabled": true,
+  "aliases": ["chatgpt", "openai-chatgpt", "gpt"]
+}
+```
+
+```json
+{
+  "id": "suno",
+  "label": "Suno",
+  "family": "suno",
+  "category": "music",
+  "color": "#ffcc33",
+  "enabled": true,
+  "aliases": ["suno", "suno-ai"]
+}
+```
+
+Graph nodes should reference source ids. Source labels, colors, families, categories, aliases, and enabled/disabled state should come from the registry. This keeps graph data stable while allowing the GUI to add new sources as the user's tool stack changes.
+
+## SourceConfidence Type
+
+`SourceConfidence` describes how the parser assigned source provenance.
+
+```ts
+type SourceConfidence =
+  | "explicit"
+  | "folder-inferred"
+  | "content-inferred"
+  | "unknown";
+```
+
+## Optional Model Metadata
+
+Phase 4 should allow model metadata without requiring it for every note.
+
+```ts
+type ModelMetadata = {
+  model?: string;
+  modelFamily?: string;
+  modelProvider?: SourceFamily | string;
+  sourceUrl?: string;
+  sourceConfidence: SourceConfidence;
+};
+```
+
+Model metadata should supplement source identity, not replace it. A note can have a known source and an unknown model.
 
 ## NoteType Type
 
@@ -59,8 +149,12 @@ type GraphNode = {
   id: string;
   title: string;
   type: NoteType;
-  source: Source;
+  source: Source | string;
   sourceFamily: SourceFamily;
+  sourceConfidence?: SourceConfidence;
+  model?: string;
+  modelFamily?: string;
+  modelProvider?: string;
   project: string;
   status: string;
   path: string;
@@ -185,7 +279,14 @@ related:
   - Another note title
 asset_paths:
   - relative/path/to/asset.png
+model: gpt-5
+model_family: gpt
+model_provider: openai
+source_url: https://example.com/original-artifact
+source_confidence: explicit
 ```
+
+See `docs/SOURCE_MODEL_REGISTRY.md` for the Phase 4 registry contract.
 
 ## Example Markdown Note
 
