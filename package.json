@@ -1,0 +1,15 @@
+{
+  "name": "devdevbuilds-ghost-brain",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Source-aware graph data generator for the devdevbuilds Ghost Brain sample vault.",
+  "scripts": {
+    "build:graph": "node --experimental-strip-types src/build-graph.ts",
+    "check": "node --experimental-strip-types src/build-graph.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
+

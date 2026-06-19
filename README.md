@@ -37,6 +37,48 @@ The MVP is a local web prototype foundation with documentation, source-aware dat
 
 The first working milestone is a static graph JSON prototype generated from a small Obsidian-style vault, followed by a 3D viewer that can filter by source, project, type, status, and relationship.
 
+## Phase 2 Graph Generator
+
+Phase 2 adds a lightweight Node.js/TypeScript graph generator. It reads Markdown files recursively from `examples/sample-vault`, parses YAML frontmatter, extracts Obsidian-style wiki links, and writes graph data to `data/graph.json`.
+
+The generated graph includes:
+
+- Source-aware note nodes
+- Wikilink edges
+- Source group metadata and colors
+- Project and note type summaries
+- Resolved and unresolved link targets
+
+## Install Dependencies
+
+No package dependencies are required yet. Use Node.js 24 or newer.
+
+```sh
+npm install
+```
+
+Running `npm install` is still useful because it lets npm validate the package metadata and create a lockfile if you want one for the local workflow.
+
+## Generate Graph Data
+
+```sh
+npm run build:graph
+```
+
+This writes:
+
+```text
+data/graph.json
+```
+
+## Check the Project
+
+```sh
+npm run check
+```
+
+The current check script runs the graph build and fails if parsing or generation fails.
+
 ## Future Roadmap
 
 Ghost Brain is expected to evolve through these major phases:
@@ -51,7 +93,8 @@ Ghost Brain is expected to evolve through these major phases:
 
 ## Current Project Status
 
-Status: Phase 1 foundation.
+Status: Phase 2 static graph JSON foundation.
 
-This repository currently focuses on clean architecture, product documentation, sample source metadata, and a source-aware vault layout. No unnecessary dependencies have been added.
+This repository currently focuses on clean architecture, product documentation, sample source metadata, a source-aware vault layout, and generated graph data. No app framework or 3D frontend has been added.
 
+Phase 3 will build the first local 3D viewer on top of `data/graph.json`.

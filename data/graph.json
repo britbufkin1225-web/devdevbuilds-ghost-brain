@@ -1,0 +1,398 @@
+{
+  "generatedAt": "2026-06-19T16:25:50.158Z",
+  "summary": {
+    "nodeCount": 10,
+    "edgeCount": 13,
+    "sourceCount": 10,
+    "projectCount": 1,
+    "typeCount": 10
+  },
+  "sourceGroups": [
+    {
+      "source": "chatgpt",
+      "sourceFamily": "openai",
+      "color": "#2f80ff",
+      "count": 1
+    },
+    {
+      "source": "claude",
+      "sourceFamily": "anthropic",
+      "color": "#8f5cff",
+      "count": 1
+    },
+    {
+      "source": "claude-code",
+      "sourceFamily": "anthropic",
+      "color": "#b05cff",
+      "count": 1
+    },
+    {
+      "source": "codex",
+      "sourceFamily": "openai",
+      "color": "#39ff88",
+      "count": 1
+    },
+    {
+      "source": "gemini",
+      "sourceFamily": "google",
+      "color": "#00d4ff",
+      "count": 1
+    },
+    {
+      "source": "github",
+      "sourceFamily": "github",
+      "color": "#f5f5f5",
+      "count": 1
+    },
+    {
+      "source": "manual",
+      "sourceFamily": "manual",
+      "color": "#b8c0cc",
+      "count": 1
+    },
+    {
+      "source": "midjourney",
+      "sourceFamily": "midjourney",
+      "color": "#ff4fd8",
+      "count": 1
+    },
+    {
+      "source": "ollama",
+      "sourceFamily": "local",
+      "color": "#ffb020",
+      "count": 1
+    },
+    {
+      "source": "unknown",
+      "sourceFamily": "unknown",
+      "color": "#666666",
+      "count": 1
+    }
+  ],
+  "projects": [
+    {
+      "name": "devdevbuilds Ghost Brain",
+      "count": 10
+    }
+  ],
+  "types": [
+    {
+      "name": "agent-session",
+      "count": 1
+    },
+    {
+      "name": "build-session",
+      "count": 1
+    },
+    {
+      "name": "local-llm-note",
+      "count": 1
+    },
+    {
+      "name": "planning-session",
+      "count": 1
+    },
+    {
+      "name": "project-note",
+      "count": 1
+    },
+    {
+      "name": "prompt-note",
+      "count": 1
+    },
+    {
+      "name": "repo-note",
+      "count": 1
+    },
+    {
+      "name": "research-note",
+      "count": 1
+    },
+    {
+      "name": "strategy-session",
+      "count": 1
+    },
+    {
+      "name": "unknown-note",
+      "count": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "chatgpt-planning-session-ghost-brain-mvp",
+      "title": "ChatGPT Planning Session - Ghost Brain MVP",
+      "type": "planning-session",
+      "source": "chatgpt",
+      "sourceFamily": "openai",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "active",
+      "path": "examples/sample-vault/sources/chatgpt/chatgpt-planning-session.md",
+      "tags": [
+        "ghost-brain",
+        "planning",
+        "mvp"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 2
+    },
+    {
+      "id": "claude-code-agent-session-parser-sketch",
+      "title": "Claude Code Agent Session - Parser Sketch",
+      "type": "agent-session",
+      "source": "claude-code",
+      "sourceFamily": "anthropic",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "backlog",
+      "path": "examples/sample-vault/sources/claude-code/claude-code-agent-session.md",
+      "tags": [
+        "ghost-brain",
+        "parser",
+        "agent-session"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 1
+    },
+    {
+      "id": "claude-writing-strategy-session-memory-interface-language",
+      "title": "Claude Writing Strategy Session - Memory Interface Language",
+      "type": "strategy-session",
+      "source": "claude",
+      "sourceFamily": "anthropic",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "draft",
+      "path": "examples/sample-vault/sources/claude/claude-writing-strategy-session.md",
+      "tags": [
+        "ghost-brain",
+        "writing",
+        "strategy"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 1
+    },
+    {
+      "id": "codex-build-session-project-foundation",
+      "title": "Codex Build Session - Project Foundation",
+      "type": "build-session",
+      "source": "codex",
+      "sourceFamily": "openai",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "active",
+      "path": "examples/sample-vault/sources/codex/codex-build-session.md",
+      "tags": [
+        "ghost-brain",
+        "codex",
+        "build"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 2
+    },
+    {
+      "id": "gemini-research-note-graph-visualization-options",
+      "title": "Gemini Research Note - Graph Visualization Options",
+      "type": "research-note",
+      "source": "gemini",
+      "sourceFamily": "google",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "research",
+      "path": "examples/sample-vault/sources/gemini/gemini-research-note.md",
+      "tags": [
+        "ghost-brain",
+        "research",
+        "visualization"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 2
+    },
+    {
+      "id": "github-repo-note-devdevbuilds-ghost-brain",
+      "title": "GitHub Repo Note - devdevbuilds Ghost Brain",
+      "type": "repo-note",
+      "source": "github",
+      "sourceFamily": "github",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "active",
+      "path": "examples/sample-vault/sources/github/github-repo-note.md",
+      "tags": [
+        "ghost-brain",
+        "github",
+        "repository"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 1
+    },
+    {
+      "id": "manual-project-note-ghost-brain-overview",
+      "title": "Manual Project Note - Ghost Brain Overview",
+      "type": "project-note",
+      "source": "manual",
+      "sourceFamily": "manual",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "active",
+      "path": "examples/sample-vault/sources/manual/manual-project-note.md",
+      "tags": [
+        "ghost-brain",
+        "project",
+        "overview"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 2
+    },
+    {
+      "id": "midjourney-prompt-note-neural-vault-concept",
+      "title": "Midjourney Prompt Note - Neural Vault Concept",
+      "type": "prompt-note",
+      "source": "midjourney",
+      "sourceFamily": "midjourney",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "concept",
+      "path": "examples/sample-vault/sources/midjourney/midjourney-prompt-note.md",
+      "tags": [
+        "ghost-brain",
+        "midjourney",
+        "visual-concept"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 1
+    },
+    {
+      "id": "local-llm-note-offline-memory-questions",
+      "title": "Local LLM Note - Offline Memory Questions",
+      "type": "local-llm-note",
+      "source": "ollama",
+      "sourceFamily": "local",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "draft",
+      "path": "examples/sample-vault/sources/ollama/local-llm-note.md",
+      "tags": [
+        "ghost-brain",
+        "local-llm",
+        "offline"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 1
+    },
+    {
+      "id": "unknown-source-note-inbox-capture",
+      "title": "Unknown Source Note - Inbox Capture",
+      "type": "unknown-note",
+      "source": "unknown",
+      "sourceFamily": "unknown",
+      "project": "devdevbuilds Ghost Brain",
+      "status": "needs-triage",
+      "path": "examples/sample-vault/sources/unknown/unknown-source-note.md",
+      "tags": [
+        "ghost-brain",
+        "inbox",
+        "cleanup"
+      ],
+      "dateCreated": "2026-06-19",
+      "linkCount": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "chatgpt-planning-session-ghost-brain-mvp-codex-build-session-project-foundation",
+      "source": "chatgpt-planning-session-ghost-brain-mvp",
+      "target": "codex-build-session-project-foundation",
+      "targetTitle": "Codex Build Session - Project Foundation",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "chatgpt-planning-session-ghost-brain-mvp-manual-project-note-ghost-brain-overview",
+      "source": "chatgpt-planning-session-ghost-brain-mvp",
+      "target": "manual-project-note-ghost-brain-overview",
+      "targetTitle": "Manual Project Note - Ghost Brain Overview",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "claude-code-agent-session-parser-sketch-gemini-research-note-graph-visualization-options",
+      "source": "claude-code-agent-session-parser-sketch",
+      "target": "gemini-research-note-graph-visualization-options",
+      "targetTitle": "Gemini Research Note - Graph Visualization Options",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "claude-writing-strategy-session-memory-interface-language-manual-project-note-ghost-brain-overview",
+      "source": "claude-writing-strategy-session-memory-interface-language",
+      "target": "manual-project-note-ghost-brain-overview",
+      "targetTitle": "Manual Project Note - Ghost Brain Overview",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "codex-build-session-project-foundation-chatgpt-planning-session-ghost-brain-mvp",
+      "source": "codex-build-session-project-foundation",
+      "target": "chatgpt-planning-session-ghost-brain-mvp",
+      "targetTitle": "ChatGPT Planning Session - Ghost Brain MVP",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "codex-build-session-project-foundation-github-repo-note-devdevbuilds-ghost-brain",
+      "source": "codex-build-session-project-foundation",
+      "target": "github-repo-note-devdevbuilds-ghost-brain",
+      "targetTitle": "GitHub Repo Note - devdevbuilds Ghost Brain",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "gemini-research-note-graph-visualization-options-claude-code-agent-session-parser-sketch",
+      "source": "gemini-research-note-graph-visualization-options",
+      "target": "claude-code-agent-session-parser-sketch",
+      "targetTitle": "Claude Code Agent Session - Parser Sketch",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "gemini-research-note-graph-visualization-options-midjourney-prompt-note-neural-vault-concept",
+      "source": "gemini-research-note-graph-visualization-options",
+      "target": "midjourney-prompt-note-neural-vault-concept",
+      "targetTitle": "Midjourney Prompt Note - Neural Vault Concept",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "github-repo-note-devdevbuilds-ghost-brain-codex-build-session-project-foundation",
+      "source": "github-repo-note-devdevbuilds-ghost-brain",
+      "target": "codex-build-session-project-foundation",
+      "targetTitle": "Codex Build Session - Project Foundation",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "manual-project-note-ghost-brain-overview-chatgpt-planning-session-ghost-brain-mvp",
+      "source": "manual-project-note-ghost-brain-overview",
+      "target": "chatgpt-planning-session-ghost-brain-mvp",
+      "targetTitle": "ChatGPT Planning Session - Ghost Brain MVP",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "manual-project-note-ghost-brain-overview-local-llm-note-offline-memory-questions",
+      "source": "manual-project-note-ghost-brain-overview",
+      "target": "local-llm-note-offline-memory-questions",
+      "targetTitle": "Local LLM Note - Offline Memory Questions",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "midjourney-prompt-note-neural-vault-concept-gemini-research-note-graph-visualization-options",
+      "source": "midjourney-prompt-note-neural-vault-concept",
+      "target": "gemini-research-note-graph-visualization-options",
+      "targetTitle": "Gemini Research Note - Graph Visualization Options",
+      "type": "wikilink",
+      "resolved": true
+    },
+    {
+      "id": "local-llm-note-offline-memory-questions-manual-project-note-ghost-brain-overview",
+      "source": "local-llm-note-offline-memory-questions",
+      "target": "manual-project-note-ghost-brain-overview",
+      "targetTitle": "Manual Project Note - Ghost Brain Overview",
+      "type": "wikilink",
+      "resolved": true
+    }
+  ]
+}

@@ -58,16 +58,15 @@ type NoteType =
 type GraphNode = {
   id: string;
   title: string;
-  type: NoteType | "folder" | "asset";
+  type: NoteType;
   source: Source;
-  source_family: SourceFamily;
+  sourceFamily: SourceFamily;
   project: string;
   status: string;
   path: string;
   tags: string[];
-  date_created: string;
-  folder?: string;
-  summary?: string;
+  dateCreated: string;
+  linkCount: number;
 };
 ```
 
@@ -78,11 +77,88 @@ type GraphEdge = {
   id: string;
   source: string;
   target: string;
-  type: "wikilink" | "markdown-link" | "tag" | "project" | "source" | "folder";
-  label?: string;
-  weight?: number;
+  targetTitle: string;
+  type: "wikilink";
+  resolved: boolean;
 };
 ```
+
+## graph.json Format
+
+Phase 2 generates `data/graph.json` from Markdown files in `examples/sample-vault`.
+
+Top-level shape:
+
+```json
+{
+  "generatedAt": "2026-06-19T00:00:00.000Z",
+  "summary": {
+    "nodeCount": 0,
+    "edgeCount": 0,
+    "sourceCount": 0,
+    "projectCount": 0,
+    "typeCount": 0
+  },
+  "sourceGroups": [],
+  "projects": [],
+  "types": [],
+  "nodes": [],
+  "edges": []
+}
+```
+
+`sourceGroups` contains source metadata used by the future 3D viewer:
+
+```json
+{
+  "source": "chatgpt",
+  "sourceFamily": "openai",
+  "color": "#2f80ff",
+  "count": 1
+}
+```
+
+`projects` and `types` are count summaries:
+
+```json
+{
+  "name": "devdevbuilds Ghost Brain",
+  "count": 10
+}
+```
+
+Each node represents one Markdown note:
+
+```json
+{
+  "id": "chatgpt-planning-session-ghost-brain-mvp",
+  "title": "ChatGPT Planning Session - Ghost Brain MVP",
+  "type": "planning-session",
+  "source": "chatgpt",
+  "sourceFamily": "openai",
+  "project": "devdevbuilds Ghost Brain",
+  "status": "active",
+  "path": "examples/sample-vault/sources/chatgpt/chatgpt-planning-session.md",
+  "tags": ["ghost-brain", "planning", "mvp"],
+  "dateCreated": "2026-06-19",
+  "linkCount": 2
+}
+```
+
+Each edge represents one Obsidian wiki link:
+
+```json
+{
+  "id": "source-node-id-target-node-id",
+  "source": "source-node-id",
+  "target": "target-node-id",
+  "targetTitle": "Original Linked Title",
+  "type": "wikilink",
+  "resolved": true
+}
+```
+
+Unresolved links keep their original `targetTitle`, use a slugified target id, and set `resolved` to `false`.
 
 ## Frontmatter Requirements
 
@@ -137,4 +213,3 @@ Related notes:
 - [[Codex Build Session - Static Graph Foundation]]
 - [[Manual Project Note - Ghost Brain Overview]]
 ```
-
