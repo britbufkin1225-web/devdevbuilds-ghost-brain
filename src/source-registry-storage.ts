@@ -122,8 +122,9 @@ function normalizeEntry(value: unknown): SourceRegistryEntry | null {
   }
 
   const record = value as Record<string, unknown>;
-  const id = cleanId(String(record.id ?? ""));
-  const name = String(record.name ?? record.label ?? "").trim();
+  const rawName = String(record.name ?? record.label ?? "").trim();
+  const id = cleanId(String(record.id ?? "") || rawName);
+  const name = rawName || id;
   const category = normalizeCategory(String(record.category ?? "Unknown"));
   const description = String(record.description ?? record.family ?? "").trim();
   const color = String(record.color ?? "#666666").trim();
@@ -179,4 +180,3 @@ function cleanId(value: string): string {
 function canUseLocalStorage(): boolean {
   return typeof window !== "undefined" && "localStorage" in window;
 }
-

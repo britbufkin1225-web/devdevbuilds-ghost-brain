@@ -617,6 +617,16 @@ p {
   font-size: 13px;
 }
 
+.registry-empty {
+  padding: 12px;
+  border: 1px solid rgba(139, 245, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 @keyframes breathe {
   0%,
   100% {

@@ -50,11 +50,25 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
 
   function saveEntry() {
     const now = new Date().toISOString();
-    const id = cleanId(form.id);
+    const id = cleanId(form.id || form.name);
     const existing = entries.find((entry) => entry.id === editingId || entry.id === id);
+    const duplicateId = entries.find((entry) => entry.id === id && entry.id !== editingId);
+    const duplicateName = entries.find(
+      (entry) => entry.name.toLowerCase() === form.name.trim().toLowerCase() && entry.id !== editingId
+    );
 
     if (!id || !form.name.trim()) {
       setMessage("Source id and name are required.");
+      return;
+    }
+
+    if (duplicateId) {
+      setMessage(`Source id "${id}" already exists. Choose a different id or edit the existing entry.`);
+      return;
+    }
+
+    if (duplicateName) {
+      setMessage(`Source name "${form.name.trim()}" already exists. Duplicate names are not saved.`);
       return;
     }
 
@@ -104,6 +118,10 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
     }
 
     onChange(entries.filter((item) => item.id !== entry.id));
+    if (editingId === entry.id) {
+      setEditingId(null);
+      setForm(EMPTY_FORM);
+    }
     setMessage(`${entry.name} deleted.`);
   }
 
@@ -122,17 +140,29 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
 
   function exportRegistry() {
     setRegistryJson(exportSourceRegistry(entries));
-    setMessage("Registry JSON exported below.");
+    setMessage(`Exported ${entries.length} registry entries below.`);
   }
 
   function importRegistry() {
+    if (!registryJson.trim()) {
+      setMessage("Paste registry JSON before importing.");
+      return;
+    }
+
     try {
       const imported = importSourceRegistry(registryJson);
       onChange(imported);
-      setMessage("Registry JSON imported.");
+      setMessage(`Imported ${imported.length} registry entries.`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Registry import failed.");
     }
+  }
+
+  function resetDefaults() {
+    onReset();
+    setEditingId(null);
+    setForm(EMPTY_FORM);
+    setMessage("Registry reset to the default sources.");
   }
 
   return (
@@ -152,7 +182,7 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
           <section className="registry-list">
             <div className="registry-section-heading">
               <h3>Registry</h3>
-              <button type="button" onClick={onReset}>
+              <button type="button" onClick={resetDefaults}>
                 Reset defaults
               </button>
             </div>
@@ -166,6 +196,9 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
             </div>
 
             <div className="registry-entry-list">
+              {entries.length === 0 ? (
+                <p className="registry-empty">No registry entries are available. Reset defaults to restore built-in sources.</p>
+              ) : null}
               {entries.map((entry) => (
                 <article key={entry.id} className={`registry-entry ${entry.enabled ? "" : "disabled"}`}>
                   <span
@@ -201,7 +234,11 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
               </label>
               <label>
                 ID
-                <input value={form.id} onChange={(event) => updateForm("id", event.target.value)} />
+                <input
+                  value={form.id}
+                  onChange={(event) => updateForm("id", event.target.value)}
+                  placeholder="auto-generated from name if blank"
+                />
               </label>
               <label>
                 Category
@@ -284,4 +321,3 @@ function cleanId(value: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
-
