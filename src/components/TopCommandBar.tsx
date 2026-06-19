@@ -4,6 +4,7 @@ type Props = {
   mode: ViewMode;
   onModeChange: (mode: ViewMode) => void;
   onOpenRegistry: () => void;
+  onOpenAbout: () => void;
 };
 
 const MODES: Array<{ id: ViewMode; label: string; placeholder?: boolean }> = [
@@ -14,14 +15,15 @@ const MODES: Array<{ id: ViewMode; label: string; placeholder?: boolean }> = [
   { id: "dream", label: "Dream View", placeholder: true }
 ];
 
-export default function TopCommandBar({ mode, onModeChange, onOpenRegistry }: Props) {
+export default function TopCommandBar({ mode, onModeChange, onOpenRegistry, onOpenAbout }: Props) {
   return (
     <header className="top-command-bar">
       <div className="brand-lockup">
-        <span className="brand-orb" aria-hidden="true" />
-        <div>
-          <h1>devdevbuilds Ghost Brain</h1>
-          <p>source-aware 3D Obsidian memory interface</p>
+        <img className="brand-icon" src="/brand/ghostbrain-app-icon.png" alt="Ghostbrain app icon" />
+        <div className="brand-copy">
+          <img className="brand-primary-image" src="/brand/ghostbrain-primary-wide.png" alt="ghost|brain" />
+          <h1>ghost|brain</h1>
+          <p>A devdevbuilds project.</p>
         </div>
       </div>
 
@@ -40,7 +42,14 @@ export default function TopCommandBar({ mode, onModeChange, onOpenRegistry }: Pr
         <button type="button" onClick={onOpenRegistry}>
           Sources & Models
         </button>
+        <button type="button" onClick={onOpenAbout}>
+          About
+        </button>
       </nav>
+
+      <div className="studio-lockup" aria-label="devdevbuilds">
+        <img src="/brand/devdevbuilds-wordmark.png" alt="devdevbuilds" />
+      </div>
     </header>
   );
 }

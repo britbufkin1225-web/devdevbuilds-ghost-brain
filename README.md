@@ -114,6 +114,7 @@ npm run preview
 - Sources & Models panel for local registry management
 - Top mode buttons for Global, Source, Project, Cleanup, and Dream views
 - Cleanup and Dream views are placeholders in Phase 3
+- Ghostbrain header, loading state, favicon, and identity panel using devdevbuilds brand assets
 
 ## Phase 4A Source + Model Registry
 
@@ -137,6 +138,14 @@ Future Phase 4B behavior:
 - Persist the registry through a future backend, companion config file, or Obsidian plugin integration.
 - Keep a portable JSON shape that can later live at `config/source-registry.json`.
 
+## Phase 4D Project Branding
+
+Phase 4D integrates the project identity into the local viewer. The GUI uses Ghostbrain as the primary product name and devdevbuilds as the secondary studio identity.
+
+Brand assets live under `public/brand` so Vite can serve the favicon, app icon, header lockups, and loading mark without changing graph data or viewer behavior.
+
+The current final dashboard assets are documented in `docs/BRAND_ASSETS.md`. The dashboard styling uses the brushed-metal circuit references while retaining the cyber-organic 3D graph interaction layer.
+
 ## Future Roadmap
 
 Ghost Brain is expected to evolve through these major phases:
@@ -152,8 +161,8 @@ Ghost Brain is expected to evolve through these major phases:
 
 ## Current Project Status
 
-Status: Phase 4A local Source + Model Registry prototype.
+Status: Phase 4D project branding and GUI logo integration.
 
-This repository currently includes clean architecture docs, sample source metadata, a source-aware vault layout, generated graph data, the first interactive local 3D viewer, and a localStorage-backed registry GUI.
+This repository currently includes clean architecture docs, sample source metadata, a source-aware vault layout, generated graph data, the first interactive local 3D viewer, a localStorage-backed registry GUI, and branded Ghostbrain identity surfaces.
 
 The next phase should harden registry persistence and parser integration without building the dream engine or Obsidian plugin yet.

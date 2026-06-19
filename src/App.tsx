@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import AboutPanel from "./components/AboutPanel.tsx";
 import HoverCard from "./components/HoverCard.tsx";
 import LeftSidebar from "./components/LeftSidebar.tsx";
 import RightDetailPanel from "./components/RightDetailPanel.tsx";
@@ -25,6 +26,7 @@ export default function App() {
   const [filters, setFilters] = useState<Filters | null>(null);
   const [registryEntries, setRegistryEntries] = useState<SourceRegistryEntry[]>(() => loadSourceRegistry());
   const [isRegistryOpen, setIsRegistryOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
 
@@ -132,8 +134,10 @@ export default function App() {
     return (
       <div className="app-shell app-message-shell">
         <section className="app-message panel" aria-live="polite">
-          <h1>Loading Ghost Brain graph</h1>
-          <p>Reading `/data/graph.json` from the local Vite static path.</p>
+          <img className="loading-brand-icon" src="/brand/ghostbrain-app-icon.png" alt="Ghostbrain app icon" />
+          <h1>Initializing Ghostbrain...</h1>
+          <p>Mapping neural vault structure...</p>
+          <p>Loading source registry...</p>
         </section>
       </div>
     );
@@ -141,13 +145,25 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <TopCommandBar mode={viewMode} onModeChange={setViewMode} onOpenRegistry={() => setIsRegistryOpen(true)} />
+      <TopCommandBar
+        mode={viewMode}
+        onModeChange={setViewMode}
+        onOpenRegistry={() => setIsRegistryOpen(true)}
+        onOpenAbout={() => setIsAboutOpen(true)}
+      />
 
       <main className="workspace">
         <LeftSidebar graph={graph} filters={filters} registry={registry} onFiltersChange={updateFilters} />
 
         <section className="graph-stage" aria-label="3D Ghost Brain graph viewer">
-          <Suspense fallback={<div className="graph-loading">Loading 3D brain surface...</div>}>
+          <Suspense
+            fallback={
+              <div className="graph-loading">
+                <img src="/brand/ghostbrain-app-icon.png" alt="Ghostbrain app icon" />
+                <span>Initializing Ghostbrain...</span>
+              </div>
+            }
+          >
             <BrainGraph
               graph={visibleGraph}
               selectedNode={selectedNode}
@@ -179,6 +195,7 @@ export default function App() {
           onClose={() => setIsRegistryOpen(false)}
         />
       ) : null}
+      {isAboutOpen ? <AboutPanel onClose={() => setIsAboutOpen(false)} /> : null}
     </div>
   );
 }

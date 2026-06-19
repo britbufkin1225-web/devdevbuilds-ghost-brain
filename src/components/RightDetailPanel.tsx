@@ -20,8 +20,8 @@ export default function RightDetailPanel({ node, registry }: Props) {
     >
       {!node ? (
         <div className="empty-detail">
-          <p>Hover nodes to preview memory metadata.</p>
-          <p>Click nodes to inspect source, project, type, tags, and links.</p>
+          <strong>No node selected.</strong>
+          <p>Select a neural point to inspect its metadata.</p>
           <p>Use filters to isolate source, project, and note type groups.</p>
         </div>
       ) : (

@@ -152,6 +152,14 @@ Graph source filters should continue to work, and category filters should allow 
 
 Later Obsidian or plugin integration can persist the same registry model to a config file such as `config/source-registry.json`.
 
+## Project Branding
+
+Phase 4D uses Ghostbrain as the primary interface identity and devdevbuilds as the secondary studio identity.
+
+The top command bar should show a dominant Ghostbrain lockup and a smaller devdevbuilds studio mark. Loading, empty, About, favicon, and app icon states should use assets from `public/brand` while preserving the dark cyber-organic viewer language.
+
+Written studio references in UI copy, documentation, alt text, and config should use `devdevbuilds`. Logo images may preserve approved stylized lettering from the source asset.
+
 ## Source Colors
 
 Nodes should use the source color map from `docs/SOURCE_GROUPING.md`. Edges may inherit source color for source-based relationships or use neutral colors for direct links.

@@ -198,7 +198,9 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
 
             <div className="registry-entry-list">
               {entries.length === 0 ? (
-                <p className="registry-empty">No registry entries are available. Reset defaults to restore built-in sources.</p>
+                <p className="registry-empty">
+                  No sources registered yet. Add a model, source, or manual knowledge input to expand Ghostbrain.
+                </p>
               ) : null}
               {entries.map((entry) => (
                 <article key={entry.id} className={`registry-entry ${entry.enabled ? "" : "disabled"}`}>
