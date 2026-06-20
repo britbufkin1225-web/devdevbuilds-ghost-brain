@@ -13,9 +13,10 @@ The current brand source set comes from the devdevbuilds current-finals export a
 - `devdevbuilds-logo.png`: devdevbuilds studio logo.
 - `devdevbuilds-wordmark.png`: Header-ready devdevbuilds studio mark.
 - `ghostbrain-app-icon.png`: Circular app icon used by loading and About states.
+- `ghostbrain-dashboard-icon.png`: Approved centered Ghostbrain dashboard emblem used behind the graph.
 - `favicon.png`: Browser favicon.
 - `devdevbuilds-dashboard-bg.png`: Brushed-metal circuit dashboard background.
-- `devdevbuilds-dashboard-hero.png`: Large branded dashboard plate.
+- `devdevbuilds-dashboard-hero.png`: Large branded dashboard plate retained for secondary/reference use; it is not the main graph panel emblem.
 
 ## Additional Source Assets
 

@@ -25,6 +25,9 @@
   --space-xl: 24px;
   --shadow-soft: 0 18px 38px rgba(0, 0, 0, 0.34);
   --shadow-strong: 0 30px 70px rgba(0, 0, 0, 0.52);
+  --header-height: 78px;
+  --sidebar-width: clamp(240px, 16vw, 280px);
+  --details-width: clamp(300px, 20vw, 350px);
   --panel-bg: rgba(7, 8, 10, 0.78);
   --panel-border: rgba(255, 255, 255, 0.16);
   --text-muted: var(--brand-muted);
@@ -37,7 +40,7 @@
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -61,6 +64,7 @@ button:active {
 .app-shell {
   position: relative;
   min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
   background:
     linear-gradient(180deg, rgba(3, 3, 3, 0.18), rgba(3, 3, 3, 0.78)),
@@ -134,12 +138,13 @@ button:active {
   position: fixed;
   z-index: 5;
   inset: 0 0 auto;
-  min-height: 82px;
+  min-height: var(--header-height);
+  max-height: 88px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-lg);
-  padding: 14px 20px;
+  gap: var(--space-md);
+  padding: 10px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.88), rgba(9, 10, 11, 0.66)),
@@ -156,8 +161,8 @@ button:active {
 }
 
 .brand-icon {
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 0 18px var(--brand-glow), 0 0 34px rgba(255, 255, 255, 0.16);
@@ -184,8 +189,8 @@ p {
 
 .brand-primary-image {
   display: block;
-  width: min(320px, 25vw);
-  max-height: 38px;
+  width: min(285px, 22vw);
+  max-height: 32px;
   object-fit: contain;
   object-position: left center;
   filter: drop-shadow(0 0 10px var(--brand-glow));
@@ -217,7 +222,7 @@ p {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: var(--space-sm);
+  gap: 8px;
 }
 
 .mode-switcher button,
@@ -246,8 +251,8 @@ p {
 }
 
 .mode-switcher button {
-  min-height: 34px;
-  padding: 7px 12px;
+  min-height: 32px;
+  padding: 6px 10px;
   border-radius: 999px;
   font-size: 13px;
 }
@@ -279,11 +284,13 @@ p {
 .workspace {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
+  height: calc(100vh - var(--header-height));
+  min-height: 0;
   display: grid;
-  grid-template-columns: 290px minmax(0, 1fr) 330px;
-  gap: var(--space-md);
-  padding: 92px var(--space-md) var(--space-md);
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--details-width);
+  gap: var(--space-sm);
+  margin-top: var(--header-height);
+  padding: var(--space-sm);
 }
 
 .panel {
@@ -314,7 +321,8 @@ p {
 .left-sidebar,
 .right-sidebar {
   min-height: 0;
-  padding: var(--space-lg);
+  overflow: auto;
+  padding: var(--space-md);
 }
 
 .panel-heading {
@@ -387,26 +395,49 @@ p {
 .graph-stage {
   position: relative;
   min-width: 0;
-  min-height: calc(100vh - 102px);
+  min-height: 0;
+  height: 100%;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-md);
   background:
+    radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.1), transparent 34%),
     linear-gradient(180deg, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.76)),
-    url("/brand/devdevbuilds-dashboard-hero.png") center / cover no-repeat,
     #050506;
   box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.72), 0 22px 50px rgba(0, 0, 0, 0.34);
+}
+
+.graph-stage::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  margin: auto;
+  width: min(68vw, 820px);
+  height: min(78%, 820px);
+  max-width: calc(100% - 48px);
+  max-height: 78%;
+  pointer-events: none;
+  user-select: none;
+  background: url("/brand/ghostbrain-dashboard-icon.png") center / contain no-repeat;
+  filter: grayscale(1) contrast(1.08) brightness(0.78) drop-shadow(0 0 22px rgba(255, 255, 255, 0.08));
+  opacity: 0.22;
 }
 
 .brain-graph,
 .brain-graph canvas {
   position: absolute;
   inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .neural-surface {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background:
     repeating-radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.035) 0 1px, transparent 2px 42px),
     radial-gradient(circle at 50% 62%, rgba(255, 255, 255, 0.08), transparent 32%);
@@ -939,9 +970,18 @@ p {
     overflow: auto;
   }
 
+  .app-shell {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
   .workspace {
     grid-template-columns: 240px minmax(560px, 1fr);
-    padding-top: 116px;
+    height: auto;
+    min-height: calc(100vh - 112px);
+    margin-top: 112px;
+    padding: var(--space-sm);
   }
 
   .right-sidebar {
@@ -955,6 +995,7 @@ p {
   .top-command-bar {
     align-items: flex-start;
     flex-wrap: wrap;
+    max-height: none;
   }
 
   .brand-lockup {
@@ -977,7 +1018,8 @@ p {
 @media (max-width: 900px) {
   .workspace {
     grid-template-columns: 1fr;
-    padding-top: 142px;
+    min-height: calc(100vh - 132px);
+    margin-top: 132px;
   }
 
   .left-sidebar,
@@ -986,6 +1028,7 @@ p {
   }
 
   .graph-stage {
+    height: auto;
     min-height: 560px;
   }
 
@@ -1023,7 +1066,9 @@ p {
 @media (max-width: 720px) {
   .workspace {
     grid-template-columns: 1fr;
-    padding: 162px var(--space-sm) var(--space-sm);
+    min-height: calc(100vh - 150px);
+    margin-top: 150px;
+    padding: var(--space-sm);
   }
 
   .graph-stage {
