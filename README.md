@@ -1,14 +1,14 @@
-# devdevbuilds Ghost Brain
+# Ghostbrain
 
-devdevbuilds Ghost Brain is a source-aware 3D Obsidian memory interface. It reads an Obsidian-style Markdown vault and turns folders, files, links, tags, prompts, sessions, repositories, and visual assets into an interactive neural graph.
+Ghostbrain is a devdevbuilds source-aware 3D Obsidian memory interface. It reads an Obsidian-style Markdown vault and turns folders, files, links, tags, prompts, sessions, repositories, and visual assets into an interactive neural graph.
 
-Obsidian remains the storage and authoring layer. Ghost Brain is the custom visual brain layer: a local web prototype that helps you see where knowledge came from, how it relates to projects, and what needs cleanup.
+Obsidian remains the storage and authoring layer. Ghostbrain is the custom visual brain layer: a local web prototype that helps you see where knowledge came from, how it relates to projects, and what needs cleanup.
 
 ## Problem It Solves
 
 Modern creative and engineering work is scattered across many AI systems, repos, prompts, research notes, and manual project notes. A normal folder tree can store those files, but it does not make source, context, duplication, relationships, or project state easy to see.
 
-Ghost Brain is designed to answer questions like:
+Ghostbrain is designed to answer questions like:
 
 - Which ideas came from ChatGPT, Codex, Claude, Gemini, Midjourney, local LLMs, GitHub, or manual notes?
 - Which files belong to a specific project?
@@ -31,7 +31,7 @@ Initial source groups:
 - Manual notes
 - Unknown source fallback
 
-Ghost Brain is designed to expand beyond this default list. Future registry entries can represent regular LLMs, code tools, image tools, music tools, video tools, audio tools, research tools, local LLMs, manual notes, and unknown sources.
+Ghostbrain is designed to expand beyond this default list. Future registry entries can represent regular LLMs, code tools, image tools, music tools, video tools, audio tools, research tools, local LLMs, manual notes, and unknown sources.
 
 ## MVP Goal
 
@@ -102,19 +102,35 @@ Preview a production build:
 npm run preview
 ```
 
-## Current Viewer Features
+## Current Features
 
-- 3D graph rendered from `/data/graph.json`
+- Interactive 3D Ghostbrain graph viewer rendered from `/data/graph.json`
 - Nodes colored by source
 - Node sizing by note type
 - Subtle glowing synaptic links
 - Hover card with title, source, project, type, tags, and path
 - Click-to-select detail panel with full metadata
-- Left sidebar filters for source, category, project, and note type
-- Sources & Models panel for local registry management
+- Source/model registry panel
+- Add, edit, enable, and disable source entries
+- Registry persistence with `localStorage`
+- Registry JSON import/export
+- Source, category, project, and note type filtering
 - Top mode buttons for Global, Source, Project, Cleanup, and Dream views
 - Cleanup and Dream views are placeholders in Phase 3
-- Ghostbrain header, loading state, favicon, and identity panel using devdevbuilds brand assets
+- Branded Ghostbrain/devdevbuilds interface
+- Responsive dark GUI layout
+
+## Demo Workflow
+
+1. Run `npm install`.
+2. Run `npm run build:graph` to generate graph data for the viewer.
+3. Run `npm run dev` and open the Vite local URL.
+4. Orbit, zoom, and pan the 3D graph.
+5. Hover a node to view source-aware metadata.
+6. Click a node to open the right-side detail panel.
+7. Use source/category/project/type filters to change the visible graph.
+8. Open Sources & Models to add, edit, disable, export, and import registry entries.
+9. Open About to view the Ghostbrain project identity.
 
 ## Phase 4A Source + Model Registry
 
@@ -148,7 +164,7 @@ The current final dashboard assets are documented in `docs/BRAND_ASSETS.md`. The
 
 ## Future Roadmap
 
-Ghost Brain is expected to evolve through these major phases:
+Ghostbrain is expected to evolve through these major phases:
 
 1. Documentation and sample vault
 2. Static graph JSON
@@ -161,8 +177,8 @@ Ghost Brain is expected to evolve through these major phases:
 
 ## Current Project Status
 
-Status: Phase 4D project branding and GUI logo integration.
+Status: Phase 4F final QA and portfolio demo prep.
 
-This repository currently includes clean architecture docs, sample source metadata, a source-aware vault layout, generated graph data, the first interactive local 3D viewer, a localStorage-backed registry GUI, and branded Ghostbrain identity surfaces.
+This repository currently includes clean architecture docs, sample source metadata, a source-aware vault layout, generated graph data, the first interactive local 3D viewer, a localStorage-backed registry GUI, branded Ghostbrain identity surfaces, and a demo-ready README.
 
-The next phase should harden registry persistence and parser integration without building the dream engine or Obsidian plugin yet.
+The next phase should package portfolio screenshots, a short walkthrough script, and a concise project write-up before deeper parser or Obsidian integration work.
