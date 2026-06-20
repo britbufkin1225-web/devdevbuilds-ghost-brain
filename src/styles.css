@@ -13,6 +13,18 @@
   --brand-metal: #d9d9d9;
   --brand-glow: rgba(255, 255, 255, 0.42);
   --brand-surface: rgba(9, 10, 11, 0.8);
+  --color-danger: #ff7a7a;
+  --color-danger-soft: rgba(255, 122, 122, 0.14);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-xs: 6px;
+  --space-sm: 10px;
+  --space-md: 14px;
+  --space-lg: 18px;
+  --space-xl: 24px;
+  --shadow-soft: 0 18px 38px rgba(0, 0, 0, 0.34);
+  --shadow-strong: 0 30px 70px rgba(0, 0, 0, 0.52);
   --panel-bg: rgba(7, 8, 10, 0.78);
   --panel-border: rgba(255, 255, 255, 0.16);
   --text-muted: var(--brand-muted);
@@ -31,6 +43,19 @@ body {
 
 button {
   font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.78);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+button:active {
+  transform: translateY(0) scale(0.99);
 }
 
 .app-shell {
@@ -76,7 +101,7 @@ button {
 
 .app-message {
   width: min(560px, 100%);
-  padding: 24px;
+  padding: var(--space-xl);
 }
 
 .loading-brand-icon {
@@ -113,8 +138,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 12px 18px;
+  gap: var(--space-lg);
+  padding: 14px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.88), rgba(9, 10, 11, 0.66)),
@@ -126,7 +151,7 @@ button {
 .brand-lockup {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-md);
   min-width: min(420px, 34vw);
 }
 
@@ -192,20 +217,32 @@ p {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .mode-switcher button,
 .panel-heading button,
-.filter-pill {
+.filter-pill,
+.registry-header button,
+.registry-section-heading button,
+.registry-actions button,
+.registry-entry button,
+.example-source-grid button,
+.about-panel button {
   color: #f4f7fb;
   border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
     rgba(10, 12, 14, 0.68);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease,
+    opacity 160ms ease;
 }
 
 .mode-switcher button {
@@ -217,7 +254,13 @@ p {
 
 .mode-switcher button:hover,
 .panel-heading button:hover,
-.filter-pill:hover {
+.filter-pill:hover,
+.registry-header button:hover,
+.registry-section-heading button:hover,
+.registry-actions button:hover,
+.registry-entry button:hover,
+.example-source-grid button:hover,
+.about-panel button:hover {
   transform: translateY(-1px);
   border-color: rgba(255, 255, 255, 0.46);
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.18), inset 0 0 18px rgba(255, 255, 255, 0.06);
@@ -239,20 +282,20 @@ p {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 290px minmax(0, 1fr) 330px;
-  gap: 14px;
-  padding: 88px 14px 14px;
+  gap: var(--space-md);
+  padding: 92px var(--space-md) var(--space-md);
 }
 
 .panel {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--panel-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.09), transparent 24%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
     var(--panel-bg);
-  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.34), inset 0 0 32px rgba(255, 255, 255, 0.028);
+  box-shadow: var(--shadow-soft), inset 0 0 32px rgba(255, 255, 255, 0.028);
   backdrop-filter: blur(20px) saturate(1.08);
 }
 
@@ -271,7 +314,7 @@ p {
 .left-sidebar,
 .right-sidebar {
   min-height: 0;
-  padding: 16px;
+  padding: var(--space-lg);
 }
 
 .panel-heading {
@@ -280,8 +323,8 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
   font-weight: 720;
 }
 
@@ -295,11 +338,11 @@ p {
 .filter-section {
   position: relative;
   z-index: 1;
-  margin-top: 18px;
+  margin-top: var(--space-lg);
 }
 
 .filter-section h2 {
-  margin-bottom: 9px;
+  margin-bottom: var(--space-sm);
   color: #f0f3f6;
   font-size: 12px;
   font-weight: 700;
@@ -309,7 +352,7 @@ p {
 
 .filter-stack {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .filter-pill {
@@ -318,10 +361,10 @@ p {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   width: 100%;
   padding: 7px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   text-align: left;
   font-size: 13px;
 }
@@ -347,7 +390,7 @@ p {
   min-height: calc(100vh - 102px);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.76)),
     url("/brand/devdevbuilds-dashboard-hero.png") center / cover no-repeat,
@@ -539,10 +582,11 @@ p {
 }
 
 .registry-panel {
-  width: min(1180px, 100%);
+  width: min(1160px, 100%);
   max-height: min(820px, calc(100vh - 48px));
-  padding: 18px;
+  padding: var(--space-xl);
   overflow: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
 }
 
 .registry-header,
@@ -553,7 +597,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-md);
 }
 
 .registry-header h2,
@@ -566,6 +610,7 @@ p {
   margin-top: 5px;
   color: var(--text-muted);
   font-size: 13px;
+  line-height: 1.45;
 }
 
 .registry-header button,
@@ -574,22 +619,46 @@ p {
 .registry-entry button,
 .example-source-grid button {
   min-height: 32px;
-  color: #f4f7fb;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  background: rgba(12, 13, 15, 0.68);
-  cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+  padding: 6px 10px;
+  font-size: 12px;
 }
 
-.registry-header button:hover,
-.registry-section-heading button:hover,
-.registry-actions button:hover,
-.registry-entry button:hover,
-.example-source-grid button:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.46);
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.14);
+.button-primary {
+  border-color: rgba(255, 255, 255, 0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08)),
+    rgba(34, 36, 40, 0.82) !important;
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  font-weight: 740;
+}
+
+.button-secondary {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+    rgba(11, 12, 14, 0.72) !important;
+}
+
+.button-utility {
+  min-height: 30px !important;
+  padding-inline: 9px !important;
+}
+
+.button-danger {
+  color: #ffd7d7 !important;
+  border-color: rgba(255, 122, 122, 0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 122, 122, 0.12), rgba(255, 122, 122, 0.035)),
+    rgba(16, 10, 10, 0.72) !important;
+}
+
+.button-status.enabled {
+  border-color: rgba(57, 255, 136, 0.28) !important;
+  color: #dfffea !important;
+}
+
+.button-status.disabled {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.64) !important;
 }
 
 .registry-grid {
@@ -597,15 +666,15 @@ p {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-  gap: 18px;
-  margin-top: 18px;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
 }
 
 .category-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
-  margin: 12px 0;
+  gap: var(--space-xs);
+  margin: var(--space-md) 0 var(--space-lg);
 }
 
 .category-summary span {
@@ -619,22 +688,23 @@ p {
 
 .registry-entry-list {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .registry-entry {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto auto;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(8, 9, 11, 0.68);
 }
 
 .registry-entry.disabled {
-  opacity: 0.52;
+  opacity: 0.66;
+  filter: grayscale(0.38);
 }
 
 .registry-entry strong,
@@ -651,31 +721,31 @@ p {
   white-space: nowrap;
 }
 
-.registry-entry button,
-.registry-actions button {
-  padding: 5px 9px;
-  font-size: 12px;
-}
-
 .registry-entry button:disabled {
   cursor: not-allowed;
   opacity: 0.42;
 }
 
+.registry-entry button:disabled:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: none;
+}
+
 .registry-editor {
   display: grid;
   align-content: start;
-  gap: 14px;
+  gap: var(--space-md);
 }
 
 .registry-form {
   display: grid;
-  gap: 10px;
+  gap: var(--space-md);
 }
 
 .registry-form label {
   display: grid;
-  gap: 5px;
+  gap: var(--space-xs);
   color: #f0f3f6;
   font-size: 12px;
   font-weight: 700;
@@ -688,14 +758,25 @@ p {
   min-height: 34px;
   color: #edf7ff;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(7, 8, 10, 0.84);
   font: inherit;
 }
 
+.registry-form input::placeholder,
+.registry-editor textarea::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.registry-form input:hover,
+.registry-form select:hover,
+.registry-editor textarea:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
 .registry-form input,
 .registry-form select {
-  padding: 7px 9px;
+  padding: 8px 10px;
 }
 
 .registry-form input[type="color"] {
@@ -704,20 +785,20 @@ p {
 
 .registry-editor textarea {
   min-height: 130px;
-  padding: 10px;
+  padding: var(--space-sm);
   resize: vertical;
 }
 
 .example-source-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .example-source-grid button {
   display: grid;
-  gap: 3px;
-  padding: 8px;
+  gap: 4px;
+  padding: var(--space-sm);
   text-align: left;
 }
 
@@ -727,14 +808,18 @@ p {
 }
 
 .registry-message {
+  padding: var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.045);
   color: #f4f7fb;
   font-size: 13px;
 }
 
 .registry-empty {
-  padding: 12px;
+  padding: var(--space-md);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.045);
   color: var(--text-muted);
   font-size: 13px;
@@ -744,8 +829,8 @@ p {
 .about-panel {
   position: relative;
   z-index: 1;
-  width: min(520px, 100%);
-  padding: 24px;
+  width: min(540px, 100%);
+  padding: var(--space-xl);
 }
 
 .about-brand {
@@ -753,7 +838,7 @@ p {
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--space-md);
 }
 
 .about-brand img {
@@ -785,10 +870,10 @@ p {
 .about-source-card {
   position: relative;
   z-index: 1;
-  margin-top: 18px;
+  margin-top: var(--space-lg);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(0, 0, 0, 0.36);
   box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.035);
 }
@@ -807,14 +892,14 @@ p {
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 20px 0;
+  gap: var(--space-md);
+  margin: var(--space-lg) 0;
 }
 
 .about-metadata div {
-  padding: 10px;
+  padding: var(--space-sm);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.04);
 }
 
@@ -834,11 +919,6 @@ p {
   z-index: 1;
   min-height: 34px;
   padding: 7px 12px;
-  color: #f4f7fb;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  background: rgba(12, 13, 15, 0.68);
-  cursor: pointer;
 }
 
 @keyframes breathe {
@@ -894,14 +974,60 @@ p {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .workspace {
     grid-template-columns: 1fr;
-    padding-top: 154px;
+    padding-top: 142px;
+  }
+
+  .left-sidebar,
+  .right-sidebar {
+    max-height: none;
   }
 
   .graph-stage {
-    min-height: 520px;
+    min-height: 560px;
+  }
+
+  .registry-overlay {
+    align-items: start;
+    padding: var(--space-md);
+    overflow: auto;
+  }
+
+  .registry-panel {
+    max-height: none;
+    padding: var(--space-lg);
+  }
+
+  .registry-header,
+  .registry-section-heading,
+  .registry-actions {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .registry-entry {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .registry-entry button {
+    width: 100%;
+  }
+
+  .example-source-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    padding: 162px var(--space-sm) var(--space-sm);
+  }
+
+  .graph-stage {
+    min-height: 500px;
   }
 
   .mode-switcher {
@@ -911,5 +1037,24 @@ p {
 
   .about-metadata {
     grid-template-columns: 1fr;
+  }
+
+  .brand-lockup {
+    width: 100%;
+  }
+
+  .brand-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mode-switcher button {
+    flex: 1 1 auto;
+    min-width: max-content;
+  }
+
+  .registry-panel,
+  .about-panel {
+    padding: var(--space-md);
   }
 }

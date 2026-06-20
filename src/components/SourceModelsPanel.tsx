@@ -174,7 +174,7 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
             <h2>Sources & Models</h2>
             <p>Manage source identities for LLM, code, image, music, video, audio, research, local, manual, and unknown sources.</p>
           </div>
-          <button type="button" onClick={onClose}>
+          <button className="button-utility" type="button" onClick={onClose}>
             Close
           </button>
         </div>
@@ -183,7 +183,7 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
           <section className="registry-list">
             <div className="registry-section-heading">
               <h3>Registry</h3>
-              <button type="button" onClick={resetDefaults}>
+              <button className="button-danger" type="button" onClick={resetDefaults}>
                 Reset defaults
               </button>
             </div>
@@ -214,13 +214,23 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
                       {entry.id} / {entry.category}
                     </small>
                   </div>
-                  <button type="button" onClick={() => toggleEnabled(entry)}>
+                  <button
+                    className={entry.enabled ? "button-status enabled" : "button-status disabled"}
+                    type="button"
+                    aria-pressed={entry.enabled}
+                    onClick={() => toggleEnabled(entry)}
+                  >
                     {entry.enabled ? "Enabled" : "Disabled"}
                   </button>
-                  <button type="button" onClick={() => editEntry(entry)}>
+                  <button className="button-utility" type="button" onClick={() => editEntry(entry)}>
                     Edit
                   </button>
-                  <button type="button" onClick={() => deleteEntry(entry)} disabled={defaultIds.has(entry.id)}>
+                  <button
+                    className="button-danger"
+                    type="button"
+                    onClick={() => deleteEntry(entry)}
+                    disabled={defaultIds.has(entry.id)}
+                  >
                     Delete
                   </button>
                 </article>
@@ -269,10 +279,11 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
                 />
               </label>
               <div className="registry-actions">
-                <button type="button" onClick={saveEntry}>
+                <button className="button-primary" type="button" onClick={saveEntry}>
                   {editingId ? "Save changes" : "Add source"}
                 </button>
                 <button
+                  className="button-secondary"
                   type="button"
                   onClick={() => {
                     setEditingId(null);
@@ -287,7 +298,7 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
             <h3>Example-Ready Sources</h3>
             <div className="example-source-grid">
               {FUTURE_SOURCE_EXAMPLES.map((example) => (
-                <button key={example.id} type="button" onClick={() => addExample(example)}>
+                <button className="button-secondary" key={example.id} type="button" onClick={() => addExample(example)}>
                   {example.name}
                   <span>{example.category}</span>
                 </button>
@@ -296,10 +307,10 @@ export default function SourceModelsPanel({ entries, defaultIds, onChange, onRes
 
             <h3>Import / Export JSON</h3>
             <div className="registry-actions">
-              <button type="button" onClick={exportRegistry}>
+              <button className="button-secondary" type="button" onClick={exportRegistry}>
                 Export
               </button>
-              <button type="button" onClick={importRegistry}>
+              <button className="button-primary" type="button" onClick={importRegistry}>
                 Import
               </button>
             </div>
